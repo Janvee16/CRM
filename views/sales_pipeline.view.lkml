@@ -38,6 +38,7 @@ view: sales_pipeline {
   measure: total_close_value {
     type: sum
     sql: ${close_value} ;;  }
+
   measure: average_close_value {
     type: average
     sql: ${close_value} ;;  }
@@ -48,8 +49,7 @@ view: sales_pipeline {
   }
 
   measure: deal_stage_count {
-    type: count_distinct
-    sql: ${TABLE}.deal_stage ;;
+    type: count
   }
 
   measure: won_deals_count {
@@ -59,7 +59,8 @@ view: sales_pipeline {
 
   measure: win_rate {
     type: number
-    sql: (${won_deals_count} / ${deal_stage_count}) * 100 ;;
+    sql: (${won_deals_count} / ${deal_stage_count});;
+    value_format: "#.##%"
   }
 
   dimension_group: engage {
