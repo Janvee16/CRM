@@ -47,20 +47,20 @@ view: sales_pipeline {
     sql: ${TABLE}.deal_stage ;;
   }
 
-  # measure: deal_stage_count {
-  #   type: count
-  #   sql: ${TABLE}.deal_stage ;;
-  # }
+  measure: deal_stage_count {
+    type: count_distinct
+    sql: ${TABLE}.deal_stage ;;
+  }
 
-  # measure: won_deals_count {
-  #   type: number
-  #   sql: count(CASE WHEN ${TABLE}.deal_stage = 'Won' THEN 1 ELSE NULL END) ;;
-  # }
+  measure: won_deals_count {
+    type: number
+    sql: count(CASE WHEN ${TABLE}.deal_stage = 'Won' THEN 1 ELSE NULL END) ;;
+  }
 
-  # measure: win_rate {
-  #   type: number
-  #   sql: (${won_deals_count} / ${deal_stage_count}) * 100 ;;
-  # }
+  measure: win_rate {
+    type: number
+    sql: (${won_deals_count} / ${deal_stage_count}) * 100 ;;
+  }
 
   dimension_group: engage {
     type: time
@@ -75,15 +75,10 @@ view: sales_pipeline {
     sql: ${TABLE}.opportunity_id ;;
   }
 
-  # measure: opportunity {
-  #   type: count_distinct
-  #   sql: ${TABLE}.opportunity_id ;;
-  # }
-
-  # measure: winni {
-  #   type: number
-  #   sql: (${won_deals_count} / ${opportunity} ) * 100 ;;
-  # }
+  dimension: cycle_length {
+    type: number
+    sql: DATE_DIFF(close_date, engage_date, DAY) ;;
+  }
 
   dimension: product {
     type: string
