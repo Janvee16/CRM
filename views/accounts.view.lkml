@@ -26,6 +26,7 @@ view: accounts {
     type: string
     sql: ${TABLE}.office_location ;;
     map_layer_name: countries
+    drill_fields: [sector,account]
   }
 
   dimension: revenue {
