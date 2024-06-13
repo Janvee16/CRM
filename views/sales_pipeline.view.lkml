@@ -108,4 +108,31 @@ view: sales_pipeline {
   measure: count {
     type: count
   }
+
+  dimension: max_date {
+    type: date
+    hidden: yes
+    sql: (select max(engage_date) from `CRM_SALES.sales_pipeline`) ;;
+  }
+
+  dimension: max_engage_date{
+    type: date
+    sql: case when ${engage_date} is null then ${max_date} else ${engage_date} end ;;
+  }
+
+  dimension: max_date_1 {
+    type: date
+    hidden: yes
+    sql: (select max(close_date) from `CRM_SALES.sales_pipeline`) ;;
+  }
+
+  dimension: max_close_date{
+    type: date
+    sql: case when ${close_date} is null then ${max_date_1} else ${close_date} end ;;
+  }
+
+  # dimension: merge_date{
+  #   type: date
+  #   sql: GENERATE_DATE_ARRAY(cast(${max_engage_date} as timestamp), cast(${max_close_date} as timestamp)) ;;
+  # }
 }
