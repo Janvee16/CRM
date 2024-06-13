@@ -57,11 +57,20 @@ view: sales_pipeline {
     sql: count(CASE WHEN ${TABLE}.deal_stage = 'Won' THEN 1 ELSE NULL END) ;;
   }
 
-  measure: lost_deals_count {
+  measure: Lost_deals_count {
     type: number
     sql: count(CASE WHEN ${TABLE}.deal_stage = 'Lost' THEN 1 ELSE NULL END) ;;
   }
 
+  measure: Engaging_deals_count {
+    type: number
+    sql: count(CASE WHEN ${TABLE}.deal_stage = 'Engaging' THEN 1 ELSE NULL END) ;;
+  }
+
+  measure: Prospecting_deals_count {
+    type: number
+    sql: count(CASE WHEN ${TABLE}.deal_stage = 'Prospecting' THEN 1 ELSE NULL END) ;;
+  }
 
   measure: win_rate {
     type: number
