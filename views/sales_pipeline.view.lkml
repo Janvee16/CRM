@@ -24,6 +24,7 @@ view: sales_pipeline {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.close_date ;;
+    drill_fields: [close_date,close_week, close_month,close_quarter,  close_year]
   }
 
   dimension: close_value {
@@ -93,6 +94,7 @@ view: sales_pipeline {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.engage_date ;;
+    drill_fields: [engage_date, engage_week, engage_month, engage_quarter, engage_year]
   }
 
   dimension: opportunity_id {
@@ -174,10 +176,10 @@ view: sales_pipeline {
       value: "account"
     }
 
-    allowed_value: {
-      label: "Manager"
-      value: "manager"
-    }
+    # allowed_value: {
+    #   label: "Manager"
+    #   value: "manager"
+    # }
   }
 
   dimension : Dimension_select {
@@ -185,9 +187,8 @@ view: sales_pipeline {
       ${sales_agent}
       {% elsif dimension_selection._parameter_value == 'account' %}
       ${account}
-
       {% endif %} ;;
   }
 }
-      # {% elsif dimension_selection._parameter_value == 'manager' %}
-      # ${manager}
+  # {% elsif dimension_selection._parameter_value == 'manager' %}
+  #     ${manager}
