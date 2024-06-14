@@ -46,4 +46,9 @@ explore: sales_pipeline {
     sql_on: ${accounts.office_location} = ${country_image.office_location};;
     relationship: many_to_one
   }
+  join: date_series {
+    type: inner
+    sql_on: ${date_series.merge_date} BETWEEN ${sales_pipeline.engage_date} AND ${sales_pipeline.close_date}  ;;
+    relationship: many_to_one
+  }
 }

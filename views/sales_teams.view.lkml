@@ -11,7 +11,7 @@ view: sales_teams {
     # A dimension is a groupable field that can be used to filter query results.
     # This dimension will be called "Manager" in Explore.
 
-  dimension: manager {
+  dimension: Manager {
     type: string
     sql: ${TABLE}.manager ;;
   }
