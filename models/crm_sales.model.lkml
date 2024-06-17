@@ -37,8 +37,18 @@ explore: sales_pipeline {
     relationship: many_to_one
   }
   join: accounts {
-    type: left_outer
+    type: inner
     sql_on: ${sales_pipeline.account} = ${accounts.account} ;;
+    relationship: many_to_one
+  }
+  join: country_image {
+    type: inner
+    sql_on: ${accounts.office_location} = ${country_image.office_location};;
+    relationship: many_to_one
+  }
+  join: date_series {
+    type: inner
+    sql_on: ${date_series.merge_date} BETWEEN ${sales_pipeline.engage_date} AND ${sales_pipeline.close_date}  ;;
     relationship: many_to_one
   }
 }

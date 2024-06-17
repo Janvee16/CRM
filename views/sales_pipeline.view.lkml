@@ -25,6 +25,7 @@ view: sales_pipeline {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.close_date ;;
+    drill_fields: [close_date,close_week, close_month,close_quarter,  close_year]
   }
 
   dimension: close_value {
@@ -32,6 +33,15 @@ view: sales_pipeline {
     sql: ${TABLE}.close_value ;;
   }
 
+#   dimension: merg {
+#     type: date
+#     sql: ${date_series.merge} ;;
+#   }
+
+# dimension: key {
+#   type: string
+#   sql: concat(${date_series.merge},'*') ;;
+# }
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
@@ -85,6 +95,7 @@ view: sales_pipeline {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.engage_date ;;
+    drill_fields: [engage_date, engage_week, engage_month, engage_quarter, engage_year]
   }
 
   dimension: opportunity_id {
@@ -96,6 +107,17 @@ view: sales_pipeline {
     type: number
     sql: DATE_DIFF(close_date, engage_date, DAY) ;;
   }
+
+  dimension: cycle_lengths {
+    type: string
+    sql: CASE
+         WHEN ${cycle_length} < 30 THEN '0-30 Days'
+         WHEN ${cycle_length} < 60 THEN '31-60 Days'
+         WHEN ${cycle_length} < 90 THEN '61-90 Days'
+         ELSE '90+ Days'
+       END ;;
+  }
+
 
   dimension: product {
     type: string
@@ -109,4 +131,65 @@ view: sales_pipeline {
   measure: count {
     type: count
   }
+
+  dimension: max_date {
+    type: date
+    hidden: yes
+    sql: (select max(engage_date) from `CRM_SALES.sales_pipeline`) ;;
+  }
+
+  dimension: max_engage_date{
+    type: date
+    sql: case when ${engage_date} is null then ${max_date} else ${engage_date} end ;;
+  }
+
+  dimension: max_date_1 {
+    type: date
+    hidden: yes
+    sql: (select max(close_date) from `CRM_SALES.sales_pipeline`) ;;
+  }
+
+  dimension: max_close_date{
+    type: date
+    sql: case when ${close_date} is null then ${max_date_1} else ${close_date} end ;;
+  }
+
+  # dimension: merge_date{
+  #   type: date
+  #   sql: GENERATE_DATE_ARRAY(MIN(engage_date), MAX(close_date));;
+  # }
+
+  # dimension: manager {
+  #   type: string
+  #   sql: ${sales_teams.Manager}  ;;
+  # }
+
+
+  parameter: dimension_selection{
+    type: unquoted
+    allowed_value: {
+      label: "Sales Agent"
+      value: "sales_agent"
+    }
+
+    allowed_value: {
+      label: "Company"
+      value: "account"
+    }
+
+    # allowed_value: {
+    #   label: "Manager"
+    #   value: "manager"
+    # }
+  }
+
+  dimension : Dimension_select {
+    sql: {% if dimension_selection._parameter_value == 'sales_agent' %}
+      ${sales_agent}
+      {% elsif dimension_selection._parameter_value == 'account' %}
+      ${account}
+      {% endif %} ;;
+  }
 }
+  # {% elsif dimension_selection._parameter_value == 'manager' %}
+  #     ${manager}
