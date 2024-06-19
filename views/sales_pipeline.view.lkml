@@ -162,7 +162,7 @@ view: sales_pipeline {
     }
 
     allowed_value: {
-      label: "Company"
+      label: "Account"
       value: "account"
     }
 
