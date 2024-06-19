@@ -32,10 +32,4 @@ FROM
     datatype: date
     sql: ${TABLE}.merge_date ;;
   }
-
-  # dimension: key {
-  #   type: string
-  #   sql: concat(${merge_date},'*') ;;
-  # }
-
 }
