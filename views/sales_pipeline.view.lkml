@@ -118,6 +118,7 @@ view: sales_pipeline {
   }
 
 
+
   dimension: product {
     type: string
     sql:  (CASE WHEN ${TABLE}.product = 'GTXPro' THEN 'GTX Pro' ELSE ${TABLE}.product END);;
